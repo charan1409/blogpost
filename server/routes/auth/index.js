@@ -115,7 +115,14 @@ router.post("/signup", async (req, res) => {
   const { username, password, email } = req.body;
   const dupli = await User.findOne({ $or: [{ username }, { email }] });
   if (dupli) {
-    res.status(201).json({ message: "Username or email already exists" });
+    if (dupli.username === username) {
+      res.status(201).json({ message: "Username already exists" });
+      return;
+    }
+    if (dupli.email === email) {
+      res.status(201).json({ message: "Email already exists" });
+      return;
+    }
     return;
   }
   const salt = await bcrypt.genSalt(10);

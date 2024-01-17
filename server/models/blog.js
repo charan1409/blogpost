@@ -6,15 +6,8 @@ const blogSchema = new Schema({
     content: { type: String, required: true },
     image: { type: String, required: true },
     date: { type: String, required: true },
-    owner: { type: Schema.Types.ObjectId, ref: "User" },
+    owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     likes: { type: Number, default: 0 },
-    comments: [
-        {
-            owner: { type: Schema.Types.ObjectId, ref: "User" },
-            comment: { type: String, required: true },
-            date: { type: String, required: true },
-        },
-    ],
     likedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
 

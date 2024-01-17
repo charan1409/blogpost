@@ -30,32 +30,6 @@ app.use("/auth", authRouter);
 const blogRouter = require("./routes/blog");
 app.use("/blog", blogRouter);
 
-app.listen(5000, () => console.log("Server running on port 5000"));
+app.listen(process.env.PORT, () => console.log("Server started!"));
 
 module.exports = app;
-
-/**
- * @swagger
- * /auth/login:
- *  post:
- *   summary: Login to the application
- *  requestBody:
- *  content:
- *   application/json:
- *   schema:
- *   type: object
- *  properties:
- *  username:
- * type: string
- * description: username
- * password:
- * type: string
- * description: password
- * responses:
- * 200:
- * description: Success
- * 201:
- * description: Invalid password
- * 404:
- * description: User not found
- */
