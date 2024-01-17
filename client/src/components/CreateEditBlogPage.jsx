@@ -4,6 +4,7 @@ import { Box, Typography, TextField, Button, IconButton } from "@mui/material";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import CloseSharpIcon from "@mui/icons-material/CloseSharp";
+import { ToastContainer, toast } from "react-toastify";
 
 import { createBlog, updateBlog, getBlog } from "../utils/axiosCalls";
 
@@ -66,7 +67,7 @@ function CreateEditBlogPage({ page }) {
   };
 
   const handleReset = () => {
-    if(page === "edit") {
+    if (page === "edit") {
       navigate(`/blog/${id}`);
     } else {
       setTitle("");
@@ -78,24 +79,29 @@ function CreateEditBlogPage({ page }) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (title === "" || content === "") {
+      toast.error("Please fill all the fields");
+      return;
+    }
+    if (!uploadedImage) {
+      toast.error("Please upload an image");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("title", title);
     formData.append("content", content);
-
-    if (uploadedImage) {
-      formData.append("image", uploadedImage);
-    }
+    formData.append("image", uploadedImage);
     if (page === "create") {
       const response = await createBlog(formData);
       if (response.status === 200) {
-        alert("Blog created successfully!");
+        toast("Blog created successfully!");
         handleReset();
       }
     } else {
       const response = await updateBlog(id, formData);
       if (response.status === 200) {
         handleReset();
-        alert("Blog updated successfully!");
         navigate(`/blog/${id}`);
       }
     }
@@ -110,6 +116,7 @@ function CreateEditBlogPage({ page }) {
         alignItems: "center",
       }}
     >
+      <ToastContainer />
       <Box
         sx={{
           p: 3,
@@ -152,7 +159,11 @@ function CreateEditBlogPage({ page }) {
               {uploadedImage ? (
                 <div>
                   <img
-                    src={uploaded ? URL.createObjectURL(uploadedImage) : uploadedImage}
+                    src={
+                      uploaded
+                        ? URL.createObjectURL(uploadedImage)
+                        : uploadedImage
+                    }
                     alt="Uploaded"
                     style={{
                       width: "100%",
@@ -186,7 +197,7 @@ function CreateEditBlogPage({ page }) {
                 </p>
               )}
             </Box>
-            <Box sx={{ mt: 2}}>
+            <Box sx={{ mt: 2 }}>
               <label htmlFor="content">Content:</label>
               <ReactQuill
                 id="content"

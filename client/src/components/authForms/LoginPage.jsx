@@ -8,6 +8,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import KeyIcon from "@mui/icons-material/Key";
 import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 import { signIn } from "../../utils/axiosCalls";
 
@@ -31,6 +32,10 @@ function LoginPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if(username === "" || password === ""){
+      toast.error("Please fill all the fields")
+      return
+    }
     const user = {
       username: username,
       password: password,
@@ -40,12 +45,13 @@ function LoginPage() {
       localStorage.setItem("token", res.data.token);
       navigate("/");
     } else {
-      alert(res.message)
+      toast(res.message)
     }
   };
 
   return (
     <>
+      <ToastContainer />
       <Typography variant="h4" component="h1" align="center">
         Login
       </Typography>

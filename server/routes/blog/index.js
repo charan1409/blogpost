@@ -259,7 +259,7 @@ router.put(
   uploadBlogPics.single("image"),
   async (req, res) => {
     try {
-      const updatedBlog = await Blog.findByIdAndUpdate(
+      await Blog.findByIdAndUpdate(
         { _id: req.params.id },
         {
           $set: {
@@ -269,7 +269,7 @@ router.put(
           },
         }
       );
-      res.json(updatedBlog);
+      res.json({ message: "Blog updated successfully" });
     } catch (err) {
       console.log(err);
       res.json({ message: err });
@@ -313,8 +313,8 @@ router.delete("/delete-blog/:id", verifyToken, async (req, res) => {
     await User.findByIdAndUpdate(req.userId, {
       $pull: { blogs: req.params.id },
     });
-    const removedBlog = await Blog.deleteOne({ _id: req.params.id });
-    res.json(removedBlog);
+    await Blog.deleteOne({ _id: req.params.id });
+    res.json({ message: "Blog deleted successfully" });
   } catch (err) {
     res.json({ message: err });
   }

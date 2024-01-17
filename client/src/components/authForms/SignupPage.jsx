@@ -9,6 +9,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import EmailIcon from "@mui/icons-material/Email";
 import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 import { signUp } from "../../utils/axiosCalls";
 
@@ -43,8 +44,12 @@ function SignupPage() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    if (username === "" || email === "" || password === "") {
+      toast.error("Please fill all the fields");
+      return;
+    }
     if (password !== confirmPassword) {
-      alert("Passwords do not match.");
+      toast.error("Passwords do not match");
       return;
     }
     const user = {
@@ -63,6 +68,7 @@ function SignupPage() {
 
   return (
     <>
+      <ToastContainer />
       <Typography variant="h4" component="h1" align="center">
         Sign Up
       </Typography>

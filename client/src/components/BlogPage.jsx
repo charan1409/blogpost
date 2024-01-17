@@ -30,7 +30,6 @@ const BlogPage = () => {
   }, [id]);
 
   const handleDelete = async () => {
-    alert("Are you sure you want to delete this blog?");
     await deleteBlog(id);
     navigate("/");
   };
