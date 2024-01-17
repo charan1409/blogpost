@@ -10,7 +10,7 @@ function HomePage() {
   useEffect(() => {
     const fetchBlogs = async () => {
       const response = await getBlogs();
-      setBlogs(response.data);
+      setBlogs(response?.data);
     };
     fetchBlogs();
   }, []);

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosHelper = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://blogpostbackend.onrender.com",
   headers: {
     "Content-Type": "application/json",
   },
