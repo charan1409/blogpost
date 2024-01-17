@@ -49,6 +49,7 @@ Before you begin, ensure you have met the following requirements:
    ```
 
    Replace `your-database` and `your-secret-key` with your MongoDB database URL and a secret key for JWT authentication.
+2. Create `public/BlogPics` folders in the server folder.
 
 ## Run the Project
 
