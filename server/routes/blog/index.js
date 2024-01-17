@@ -1,3 +1,43 @@
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Blog:
+ *       type: object
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: The title of the blog post
+ *           example: "Introduction to Swagger Documentation"
+ *         content:
+ *           type: string
+ *           description: The content of the blog post
+ *           example: "Swagger is a powerful tool for API documentation..."
+ *         image:
+ *           type: string
+ *           description: URL or base64-encoded image associated with the blog post
+ *           example: "https://example.com/blog-image.jpg"
+ *         date:
+ *           type: string
+ *           format: date
+ *           description: The date of the blog post
+ *           example: "2024-01-17"
+ *         owner:
+ *           type: string
+ *           description: ID of the user who owns the blog post
+ *           example: "5f8d44d3a99c03b78dabe92a"
+ *         likes:
+ *           type: number
+ *           description: The number of likes for the blog post
+ *           example: 15
+ *         likedBy:
+ *           type: array
+ *           description: Array of user IDs who liked the blog post
+ *           items:
+ *             type: string
+ *           example: ["5f8d44d3a99c03b78dabe92b", "5f8d44d3a99c03b78dabe92c"]
+ */
+
 const express = require("express");
 const router = express.Router();
 
@@ -6,7 +46,30 @@ const User = require("../../models/User");
 const Blog = require("../../models/Blog");
 
 const { uploadBlogPics } = require("../utils/multer");
-
+/**
+ * @swagger
+ * paths:
+ *   /get-blogs:
+ *     get:
+ *       summary: Get all blogs
+ *       tags:
+ *         - Blog
+ *       responses:
+ *         '200':
+ *           description: A list of blogs
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/Blog'
+ *         '202':
+ *           description: Error occurred
+ *           content:
+ *             application/json:
+ *               example:
+ *                 message: An error occurred
+ */
 // Get all blogs
 router.get("/get-blogs", async (req, res) => {
   try {
@@ -16,7 +79,38 @@ router.get("/get-blogs", async (req, res) => {
     res.json({ message: err });
   }
 });
-
+/**
+ * @swagger
+ * paths:
+ *   /get-blog/{id}:
+ *     get:
+ *       summary: Get a specific blog
+ *       tags:
+ *         - Blog
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           description: ID of the blog
+ *           schema:
+ *             type: string
+ *             example: "5f8d44d3a99c03b78dabe92a"
+ *       security:
+ *         - bearerAuth: []
+ *       responses:
+ *         '200':
+ *           description: The blog details
+ *           content:
+ *             application/json:
+ *               schema:
+ *                 $ref: '#/components/schemas/Blog'
+ *         '202':
+ *           description: Error occurred
+ *           content:
+ *             application/json:
+ *               example:
+ *                 message: An error occurred
+ */
 // Get a specific blog
 router.get("/get-blog/:id", verifyToken, async (req, res) => {
   try {
@@ -36,7 +130,47 @@ router.get("/get-blog/:id", verifyToken, async (req, res) => {
     res.status(202).json({ message: err });
   }
 });
-
+/**
+ * @swagger
+ * paths:
+ *   /create-blog:
+ *     post:
+ *       summary: Create a blog
+ *       tags:
+ *         - Blog
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           multipart/form-data:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 title:
+ *                   type: string
+ *                   description: The title of the blog post
+ *                 content:
+ *                   type: string
+ *                   description: The content of the blog post
+ *                 image:
+ *                   type: string
+ *                   format: binary
+ *                   description: Image file for the blog post
+ *       security:
+ *         - bearerAuth: []
+ *       responses:
+ *         '200':
+ *           description: Blog posted successfully
+ *           content:
+ *             application/json:
+ *               example:
+ *                 message: Blog posted successfully
+ *         '202':
+ *           description: Error occurred
+ *           content:
+ *             application/json:
+ *               example:
+ *                 message: An error occurred
+ */
 // Create a blog
 router.post(
   "/create-blog",
@@ -70,7 +204,54 @@ router.post(
     }
   }
 );
-
+/**
+ * @swagger
+ * paths:
+ *   /update-blog/{id}:
+ *     put:
+ *       summary: Update a blog
+ *       tags:
+ *         - Blog
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           description: ID of the blog
+ *           schema:
+ *             type: string
+ *             example: "5f8d44d3a99c03b78dabe92a"
+ *       requestBody:
+ *         required: true
+ *         content:
+ *           multipart/form-data:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 title:
+ *                   type: string
+ *                   description: The updated title of the blog post
+ *                 content:
+ *                   type: string
+ *                   description: The updated content of the blog post
+ *                 image:
+ *                   type: string
+ *                   format: binary
+ *                   description: Updated image file for the blog post
+ *       security:
+ *         - bearerAuth: []
+ *       responses:
+ *         '200':
+ *           description: The updated blog
+ *           content:
+ *             application/json:
+ *               $ref: '#/components/schemas/Blog'
+ *         '202':
+ *           description: Error occurred
+ *           content:
+ *             application/json:
+ *               example:
+ *                 message: An error occurred
+ */
 // Update a blog
 router.put(
   "/update-blog/:id",
@@ -95,7 +276,37 @@ router.put(
     }
   }
 );
-
+/**
+ * @swagger
+ * paths:
+ *   /delete-blog/{id}:
+ *     delete:
+ *       summary: Delete a blog
+ *       tags:
+ *         - Blog
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           description: ID of the blog
+ *           schema:
+ *             type: string
+ *             example: "5f8d44d3a99c03b78dabe92a"
+ *       security:
+ *         - bearerAuth: []
+ *       responses:
+ *         '200':
+ *           description: The deleted blog
+ *           content:
+ *             application/json:
+ *               $ref: '#/components/schemas/Blog'
+ *         '202':
+ *           description: Error occurred
+ *           content:
+ *             application/json:
+ *               example:
+ *                 message: An error occurred
+ */
 // Delete a blog
 router.delete("/delete-blog/:id", verifyToken, async (req, res) => {
   try {
@@ -110,7 +321,38 @@ router.delete("/delete-blog/:id", verifyToken, async (req, res) => {
 });
 
 module.exports = router;
-
+/**
+ * @swagger
+ * paths:
+ *   /like-blog/{id}:
+ *     put:
+ *       summary: Like/Dislike a blog
+ *       tags:
+ *         - Blog
+ *       parameters:
+ *         - in: path
+ *           name: id
+ *           required: true
+ *           description: ID of the blog
+ *           schema:
+ *             type: string
+ *             example: "5f8d44d3a99c03b78dabe92a"
+ *       security:
+ *         - bearerAuth: []
+ *       responses:
+ *         '200':
+ *           description: The status of the like operation
+ *           content:
+ *             application/json:
+ *               example:
+ *                 message: The blog has been liked
+ *         '202':
+ *           description: Error occurred
+ *           content:
+ *             application/json:
+ *               example:
+ *                 message: An error occurred
+ */
 // like the blog
 router.put("/like-blog/:id", verifyToken, async (req, res) => {
   try {
