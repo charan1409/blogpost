@@ -3,7 +3,7 @@ const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const app = require("../index");
 const User = require("../models/user");
-const Blog = require("../models/Blog");
+const Blog = require("../models/blog");
 const { generateToken } = require("../routes/utils/AuthToken");
 
 describe("POST /login", () => {

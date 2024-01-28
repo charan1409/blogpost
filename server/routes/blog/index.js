@@ -43,7 +43,7 @@ const router = express.Router();
 
 const { verifyToken } = require("../utils/AuthToken");
 const User = require("../../models/user");
-const Blog = require("../../models/Blog");
+const Blog = require("../../models/blog");
 
 const { uploadBlogPics } = require("../utils/multer");
 /**
