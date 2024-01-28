@@ -39,7 +39,7 @@
 
 const express = require("express");
 const router = express();
-const User = require("../../models/User");
+const User = require("../../models/user");
 const { generateToken, verifyToken } = require("../utils/AuthToken");
 const bcrypt = require("bcryptjs");
 /**

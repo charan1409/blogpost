@@ -2,7 +2,7 @@ const request = require("supertest");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const app = require("../index");
-const User = require("../models/User");
+const User = require("../models/user");
 const Blog = require("../models/Blog");
 const { generateToken } = require("../routes/utils/AuthToken");
 

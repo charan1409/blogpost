@@ -10,7 +10,6 @@ const app = express();
 
 app.use(cors({
   origin: "https://blogpost-4kwq.onrender.com",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
 }));
 app.use(express.json());
