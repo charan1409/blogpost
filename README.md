@@ -2,6 +2,14 @@
 
 The Blog Post Website is a user-friendly platform that empowers individuals to share their thoughts through personalized blog posts. Users can easily sign up, log in, and create engaging content with the flexibility to edit and delete their posts. The platform fosters user interaction by allowing likes on blog posts, creating a sense of community appreciation. With a responsive design for seamless use across devices, coupled with robust security measures like hashed passwords, the website ensures a safe and enjoyable experience.
 
+[Preview link](https://blogpost-4kwq.onrender.com)
+
+![1706431692165](image/README/1706431692165.png)
+
+![1706431857114](image/README/1706431857114.png)
+
+![1706432033874](image/README/1706432033874.png)
+
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
