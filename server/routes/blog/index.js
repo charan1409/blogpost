@@ -46,6 +46,8 @@ const User = require("../../models/user");
 const Blog = require("../../models/blog");
 
 const { uploadBlogPics } = require("../utils/multer");
+const storage = require("../config/firebase.config");
+const { getDownloadURL, ref, uploadBytes } = require("firebase/storage");
 /**
  * @swagger
  * paths:
@@ -112,21 +114,13 @@ router.get("/get-blogs", async (req, res) => {
  *                 message: An error occurred
  */
 // Get a specific blog
-router.get("/get-blog/:id", verifyToken, async (req, res) => {
+router.get("/get-blog/:id", async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id).populate("owner");
-    const owner = await User.findById(blog.owner._id);
-    const user = await User.findById(req.userId);
-    const isLiked = user.likedBlogs.includes(blog._id);
-    const isOwner = owner._id.toString() === user._id.toString();
-    const blogData = {
-      ...blog._doc,
-      isLiked: isLiked,
-      isOwner: isOwner,
-    };
-    res.status(200).json(blogData);
+    if (!blog) return res.status(202).json({ message: "Blog not found" });
+    res.status(200).json(blog);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(202).json({ message: err });
   }
 });
@@ -183,10 +177,15 @@ router.post(
       month: "short",
       day: "numeric",
     });
+    const fileBuffer = req.file.buffer;
+    const fileName = `blogImages/${Date.now()}-${req.file.originalname}`;
+    const storageRef = ref(storage, fileName);
+    const blobStream = await uploadBytes(storageRef, fileBuffer);
+    const publicUrl = await getDownloadURL(storageRef);
     const blog = new Blog({
       title: req.body.title,
       content: req.body.content,
-      image: `http://localhost:5000/BlogPics/${req.file?.filename}`,
+      image: publicUrl,
       owner: userId,
       date: date,
     });
@@ -358,12 +357,22 @@ router.put("/like-blog/:id", verifyToken, async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog.likedBy.includes(req.userId)) {
-      await blog.updateOne({ $push: { likedBy: req.userId }, $inc: { likes: 1 } });
-      await User.findByIdAndUpdate(req.userId, { $push: { likedBlogs: blog._id } });
+      await blog.updateOne({
+        $push: { likedBy: req.userId },
+        $inc: { likes: 1 },
+      });
+      await User.findByIdAndUpdate(req.userId, {
+        $push: { likedBlogs: blog._id },
+      });
       res.json({ message: "The blog has been liked" });
     } else {
-      await blog.updateOne({ $pull: { likedBy: req.userId }, $inc: { likes: -1 } });
-      await User.findByIdAndUpdate(req.userId, { $pull: { likedBlogs: blog._id } });
+      await blog.updateOne({
+        $pull: { likedBy: req.userId },
+        $inc: { likes: -1 },
+      });
+      await User.findByIdAndUpdate(req.userId, {
+        $pull: { likedBlogs: blog._id },
+      });
       res.json({ message: "The blog has been disliked" });
     }
   } catch (err) {

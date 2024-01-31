@@ -26,7 +26,7 @@ const MainPage = ({ page }) => {
         });
     } else {
       setUser(null);
-      if (page !== "login" && page !== "signup") {
+      if(page === "create" || page === "edit"){
         navigate("/login");
       }
     }

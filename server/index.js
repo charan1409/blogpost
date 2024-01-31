@@ -9,7 +9,7 @@ const swaggerSpecs = require("./routes/utils/Swagger");
 const app = express();
 
 app.use(cors({
-  origin: "https://blogpost-4kwq.onrender.com",
+  // origin: "https://blogpost-4kwq.onrender.com",
   credentials: true,
 }));
 app.use(express.json());

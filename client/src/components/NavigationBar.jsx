@@ -73,7 +73,7 @@ function NavigationBar({ user }) {
           Blog Post
         </Typography>
       </Box>
-      {user && (
+      {user ? (
         <Box
           sx={{
             display: "flex",
@@ -153,6 +153,43 @@ function NavigationBar({ user }) {
           >
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            gap: "20px",
+            marginRight: "120px",
+            "@media (max-width: 600px)": {
+              marginRight: "20px",
+            },
+          }}
+        >
+          <Typography
+            sx={{
+              cursor: "pointer",
+              "@media (max-width: 600px)": {
+                display: "none",
+              },
+            }}
+            onClick={() => navigate("/login")}
+          >
+            Login
+          </Typography>
+          <Typography
+            sx={{
+              cursor: "pointer",
+              "@media (max-width: 600px)": {
+                display: "none",
+              },
+            }}
+            onClick={() => navigate("/register")}
+          >
+            Register
+          </Typography>
         </Box>
       )}
     </Box>

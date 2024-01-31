@@ -45,7 +45,7 @@ function LoginPage() {
       localStorage.setItem("token", res.data.token);
       navigate("/");
     } else {
-      toast(res.message)
+      toast(res.data.message)
     }
   };
 
