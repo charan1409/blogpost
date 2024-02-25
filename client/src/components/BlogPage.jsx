@@ -9,17 +9,19 @@ import {
   IconButton,
 } from "@mui/material";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
-import ModeEditOutlinedIcon from "@mui/icons-material/ModeEditOutlined";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+// import RemoveCircleOutlineOutlinedIcon from "@mui/icons-material/RemoveCircleOutlineOutlined";
+import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 
-import { getBlog, deleteBlog, likeBlog } from "../utils/axiosCalls";
+import { getBlog, likeBlog, deleteBlog } from "../utils/axiosCalls";
 
 const BlogPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [blog, setBlog] = useState({});
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -29,18 +31,33 @@ const BlogPage = () => {
     fetchBlog();
   }, [id]);
 
-  const handleDelete = async () => {
-    await deleteBlog(id);
-    navigate("/");
-  };
+  useEffect(() => {
+    if (blog?.isLiked === undefined) {
+      setBlog({ ...blog, isLiked: false });
+    }
+  }, [blog]);
+
+  useEffect(() => {
+    const loginCheck = () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setIsLogged(false);
+      } else {
+        setIsLogged(true);
+      }
+    };
+    loginCheck();
+  }, [navigate]);
 
   const handleLike = async (liked) => {
-    if (liked) {
-      setBlog({ ...blog, isLiked: true, likes: blog.likes + 1 });
-    } else {
-      setBlog({ ...blog, isLiked: false, likes: blog.likes - 1 });
+    if (isLogged) {
+      if (liked) {
+        setBlog({ ...blog, isLiked: true, likes: blog.likes + 1 });
+      } else {
+        setBlog({ ...blog, isLiked: false, likes: blog.likes - 1 });
+      }
+      await likeBlog(id, liked);
     }
-    await likeBlog(id);
   };
 
   return (
@@ -74,21 +91,34 @@ const BlogPage = () => {
               <KeyboardBackspaceIcon />
             </IconButton>
             {blog?.isOwner && (
-              <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <IconButton
                   sx={{ color: "#333", fontSize: "24px" }}
                   title="Edit blog?"
                   onClick={() => {
-                    navigate(`/edit-blog/${blog?._id}`);
+                    navigate(`/edit-blog/${blog._id}`);
                   }}
                 >
-                  <ModeEditOutlinedIcon />
+                  <BorderColorOutlinedIcon />
                 </IconButton>
+                {/* <IconButton
+                  sx={{ color: "#333", fontSize: "24px" }}
+                  title="Disable Blog?"
+                >
+                  <RemoveCircleOutlineOutlinedIcon />
+                </IconButton> */}
                 <IconButton
-                  sx={{ mr: 2, color: "#333", fontSize: "24px" }}
+                  sx={{ color: "#f34f34", fontSize: "24px" }}
                   title="Delete blog?"
-                  onClick={() => {
-                    handleDelete();
+                  onClick={async () => {
+                    await deleteBlog(blog._id);
+                    navigate("/");
                   }}
                 >
                   <DeleteOutlinedIcon />

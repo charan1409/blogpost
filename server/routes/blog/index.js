@@ -118,10 +118,31 @@ router.get("/get-blog/:id", async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id).populate("owner");
     if (!blog) return res.status(202).json({ message: "Blog not found" });
+    const username = await req.cookies.username;
+    if (username) {
+      const user = await User.findOne({ username: username });
+      const isOwner = user._id.toString() === blog.owner._id.toString();
+      const isLiked = blog.likedBy.includes(user._id);
+      const data = {
+        ...blog._doc,
+        isOwner: isOwner,
+        isLiked: isLiked,
+      }
+      return res.status(200).json(data);
+    }
     res.status(200).json(blog);
   } catch (err) {
     console.log(err);
     res.status(202).json({ message: err });
+  }
+});
+
+router.get("/get-my-blogs", verifyToken, async (req, res) => {
+  try {
+    const blogs = await Blog.find({ owner: req.userId });
+    res.json(blogs);
+  } catch (err) {
+    res.json({ message: err });
   }
 });
 /**

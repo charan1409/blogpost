@@ -9,6 +9,7 @@ import KeyIcon from "@mui/icons-material/Key";
 import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 import { signIn } from "../../utils/axiosCalls";
 
@@ -43,6 +44,7 @@ function LoginPage() {
     const res = await signIn(user);
     if (res.status === 200) {
       localStorage.setItem("token", res.data.token);
+      Cookies.set("username", res.data.username);
       navigate("/");
     } else {
       toast(res.data.message)

@@ -5,21 +5,21 @@ const mongoose = require("mongoose");
 require("dotenv").config();
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = require("./routes/utils/Swagger");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 
 app.use(cors({
-  // origin: "https://blogpost-4kwq.onrender.com",
-  credentials: true,
+  origin: "http://localhost:3000",
+  credentials: true
 }));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB connected!"));
-
-app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

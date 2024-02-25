@@ -1,19 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "@mui/material";
 
-import BlogCard from "./blogCard.jsx/BlogCard";
-import { getBlogs } from "../utils/axiosCalls";
+import BlogCard from "./blogCard/BlogCard";
+import { getBlogs, getMyBlogs } from "../utils/axiosCalls";
 
-function HomePage() {
+function HomePage({ myblogs }) {
   const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
     const fetchBlogs = async () => {
-      const response = await getBlogs();
-      setBlogs(response?.data);
+      if (myblogs) {
+        const response = await getMyBlogs();
+        setBlogs(response?.data);
+      } else {
+        const response = await getBlogs();
+        setBlogs(response?.data);
+      }
     };
     fetchBlogs();
-  }, []);
+  }, [myblogs]);
 
   return (
     <Box

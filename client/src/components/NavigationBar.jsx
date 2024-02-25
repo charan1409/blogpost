@@ -151,6 +151,14 @@ function NavigationBar({ user }) {
             }}
             disableScrollLock={true}
           >
+            <MenuItem
+              onClick={() => {
+                handleOptionsClose();
+                navigate("/my-blogs")
+              }}
+            >
+              My blogs
+            </MenuItem>
             <MenuItem onClick={handleLogout}>Logout</MenuItem>
           </Menu>
         </Box>
@@ -186,7 +194,7 @@ function NavigationBar({ user }) {
                 display: "none",
               },
             }}
-            onClick={() => navigate("/register")}
+            onClick={() => navigate("/signup")}
           >
             Register
           </Typography>

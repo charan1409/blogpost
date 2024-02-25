@@ -14,6 +14,8 @@ function App() {
         <Route path="/create-blog" element={<MainPage page={"create"} />} />
         <Route path="/blog/:id" element={<MainPage page={"blog"} />} />
         <Route path="/edit-blog/:id" element={<MainPage page={"edit"} />} />
+        <Route path="/profile/:username" element={<MainPage page={"profile"} />} />
+        <Route path="/my-blogs" element={<MainPage page={"myblogs"} />} />
       </Routes>
     </BrowserRouter>
   );

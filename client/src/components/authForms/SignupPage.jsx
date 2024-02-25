@@ -10,6 +10,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import PersonSharpIcon from "@mui/icons-material/PersonSharp";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
+import Cookies from "js-cookie";
 
 import { signUp } from "../../utils/axiosCalls";
 
@@ -60,6 +61,7 @@ function SignupPage() {
     const res = await signUp(user);
     if (res.status === 200) {
       localStorage.setItem("token", res.data.token);
+      Cookies.set("username", res.data.username);
       navigate("/login");
     } else {
       alert(res.message);

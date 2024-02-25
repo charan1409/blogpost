@@ -49,6 +49,15 @@ export const getBlogs = async () => {
   }
 };
 
+export const getMyBlogs = async () => {
+  try {
+    const response = await axios.get("/blog/get-my-blogs");
+    return response;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export const getBlog = async (id) => {
   try {
     const response = await axios.get(`/blog/get-blog/${id}`);

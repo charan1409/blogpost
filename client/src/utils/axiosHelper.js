@@ -18,4 +18,6 @@ axiosHelper.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+axiosHelper.defaults.withCredentials = true;
+
 export default axiosHelper;

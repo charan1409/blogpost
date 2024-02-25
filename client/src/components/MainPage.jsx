@@ -4,6 +4,7 @@ import HomePage from "./HomePage";
 import NavigationBar from "./NavigationBar";
 import BlogPage from "./BlogPage";
 import CreateEditBlogPage from "./CreateEditBlogPage";
+import ProfilePage from "./ProfilePage";
 import { useNavigate } from "react-router-dom";
 
 import { profilePicture } from "../utils/axiosCalls";
@@ -46,6 +47,10 @@ const MainPage = ({ page }) => {
         return <CreateEditBlogPage page={page}/>;
       case "edit":
         return <CreateEditBlogPage page={page}/>;
+      case "profile":
+        return <ProfilePage user={user} />;
+      case "myblogs":
+        return <HomePage myblogs={true} />;
       default:
         return <AuthPage formType="login" />;
     }
